@@ -100,7 +100,7 @@ function box:new(o)
 end
 
 game_camera = {
-    predefined_shake_magnitude = { small = 3, medium = 5, large = 7, extreme = 10 },
+    predefined_shake_magnitude = { small = 1, medium = 2, large = 5, extreme = 10 },
     position = vec:new(),
     offset = vec:new(),
     x_offset = 0,
@@ -328,6 +328,7 @@ player = {
                 self.state = action_states.attacking
                 self.time_left_in_state = 0.2;
                 if (self.weapon_hitbox:intersects(boss.hitbox)) then
+                    game_camera:shake(game_camera.predefined_shake_magnitude.small)
                     boss.health = mid(0, boss.health - 100, boss.max_health)
                     if boss.health == 0 then
                         boss.is_alive = false
@@ -464,6 +465,7 @@ boss = {
                 player.is_alive = false
                 input_cooldown = 1
             end
+            game_camera:shake(game_camera.predefined_shake_magnitude.medium)
             sfx(61)
         end
     end,
@@ -524,6 +526,7 @@ function init()
 end
 
 function update()
+    game_camera:update()
     if boss.is_alive and player.is_alive then
         player:update()
         boss:update()
@@ -539,6 +542,7 @@ function update()
 end
 
 function draw()
+    game_camera:draw()
     map(0, 0, 0, 0, 16, 16)
     if not boss.is_alive or not player.is_alive then
         local cycle_ends_text = "the cycle ends"
@@ -569,22 +573,22 @@ function draw_ui()
     local boss_bar_thickness = 2
 
     rectfill(
-        12 + game_camera.position.x, 
-        boss_bar_y + game_camera.position.y, 
-        114 + game_camera.position.x, 
-        boss_bar_y - boss_bar_thickness + game_camera.position.y, 7
+        12, 
+        boss_bar_y,  
+        114, 
+        boss_bar_y - boss_bar_thickness, 7
     )
     rectfill(
-        12 + game_camera.position.x, 
-        boss_bar_y + game_camera.position.y, 
-        16 + ceil(98 * boss_health_left_ratio) + game_camera.position.x, 
-        boss_bar_y - boss_bar_thickness + game_camera.position.y, 8
+        12, 
+        boss_bar_y, 
+        16 + ceil(98 * boss_health_left_ratio), 
+        boss_bar_y - boss_bar_thickness, 8
     )
     rect(
-        12 + game_camera.position.x, 
-        boss_bar_y + game_camera.position.y, 
-        114 + game_camera.position.x, 
-        boss_bar_y - boss_bar_thickness + game_camera.position.y, 0
+        12, 
+        boss_bar_y, 
+        114, 
+        boss_bar_y - boss_bar_thickness, 0
     )
 
     -- Player 
