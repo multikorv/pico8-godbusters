@@ -185,7 +185,7 @@ player = {
     walking_speed = 1,
     dashing_speed = 4,
     hitbox = box:new({position = vec:new(), width = 7, height = 12}),
-    weapon_hitbox = box:new({position = vec:new(), width = 12, height = 12}),
+    weapon_hitbox = box:new({position = vec:new(), width = 16, height = 16}),
     dash_speed = 5,
     num_dashes = 3,
     max_dashes = 3,
@@ -348,17 +348,17 @@ player = {
         local weapon_x_offset = 0
         local weapon_y_offset = 0
         if self.direction == direction_states.up then
-            weapon_x_offset = 2
+            weapon_x_offset = -1
             weapon_y_offset = -4
         elseif self.direction == direction_states.down then
-            weapon_x_offset = 2
+            weapon_x_offset = -1
             weapon_y_offset = 7
         elseif self.direction == direction_states.left then
-            weapon_x_offset = -3
-            weapon_y_offset = 2 
+            weapon_x_offset = -5
+            weapon_y_offset = 0 
         elseif self.direction == direction_states.right then
-            weapon_x_offset = 7
-            weapon_y_offset = 2
+            weapon_x_offset = 5
+            weapon_y_offset = 0
         end
         self.weapon_hitbox.position.x = self.position.x + weapon_x_offset
         self.weapon_hitbox.position.y = self.position.y + weapon_y_offset
@@ -401,7 +401,7 @@ player = {
             if self.direction == direction_states.up then
                 spr(32, self.position.x, self.position.y - slash_offset, 2, 2)
             elseif self.direction == direction_states.down then
-                spr(32, self.position.x, self.position.y + slash_offset, 2, 2, false, true) 
+                spr(32, self.position.x, self.position.y + slash_offset + 4, 2, 2, false, true) 
             elseif self.direction == direction_states.left then
                 spr(34, self.position.x - slash_offset, self.position.y, 2, 2) 
             elseif self.direction == direction_states.right then
