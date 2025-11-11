@@ -294,9 +294,10 @@ player = {
         -- ****** STATE ******
         if self.time_left_in_state == 0 then
             if self.state != action_states.walking then
+                if self.state == action_states.dashing then
+                    self.velocity = self.velocity * vec:new({x = 1/self.dash_speed, y = 1/self.dash_speed, z = 1/self.dash_speed})
+                end
                 self.state = action_states.walking
-                self.velocity = self.velocity * vec:new({x = 1/self.dash_speed, y = 1/self.dash_speed, z = 1/self.dash_speed})
-                --self.time_left_in_state = 0.15;
             elseif btnp(5) and self.num_dashes > 0 then
                 self.state = action_states.dashing
                 self.time_left_in_state = 0.1;
@@ -314,10 +315,6 @@ player = {
                     end
                     sfx(60)
                 end
-            elseif self.state != action_states.walking then
-                self.state = action_states.walking
-                self.velocity = self.velocity * vec:new({x = 1/self.dash_speed, y = 1/self.dash_speed, z = 1/self.dash_speed})
-                --self.time_left_in_state = 0.15;
             end
         else
             self.time_left_in_state = max(0, self.time_left_in_state - dt)
