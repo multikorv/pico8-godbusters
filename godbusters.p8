@@ -143,6 +143,107 @@ game_camera = {
         self.current_shake_magnitude = magnitude
     end
 }
+
+particle_system = {
+    particles = {},
+    update = function(self) 
+    end,
+    draw = function(self)
+        for particle in all(self.particles) do
+            local particle_color = 8
+
+            -- TODO: Update to handle different kinds, i.e blood drops, explosion, sprite based etc
+            --if particle.red then
+            --    particle_color = self.map_red(particle.age)
+            --else
+            --    particle_color = self.map_red(particle.age)
+            --end
+
+            if particle.spark then
+                pset(particle.position.x, particle.position.y, particle_color)
+            else
+                circfill(particle.position.x, particle.position.y, particle.size, particle_color)
+            end
+
+            particle.position.x = particle.position.x + (particle.velocity.x * dt)
+            particle.position.y = particle.position.y + (particle.velocity.y * dt)
+
+            if particle.gravity then
+                particle.velocity = particle.velocity + particle.vgravity
+            end
+            --particle.velocity.x *= 0.85-- /(1 - dt)
+            --particle.velocity.y *= 0.85-- /(1 - dt)
+
+            particle.age += 1 * dt
+
+            if particle.age > particle.max_age then
+                particle.size -= 0.5
+                if particle.size < 0 then
+                    del(self.particles, particle)
+                end
+            end
+        end
+        --self:debug_draw()
+    end,
+    debug_draw = function(self)
+        debug_print("num particles:"..#self.particles, 0, 16, 7)
+        for particle in all(self.particles) do
+            debug_print("particle[0]: age:"..particle.age..", x:"..particle.position.x..", y:"..particle.position.y, 0, 24, 7)
+            break
+        end
+    end,
+    blood_splatter = function(self, position)
+        for i=0,10 do
+            local particle = {}
+            particle.position = vec:new({ x = position.x + (rnd(4) - 2), y = position.y + (rnd(4) - 2) })
+            -- TODO: do not hardcode random direction, base it on hit vector
+            particle.velocity = vec:new({ x = rnd() * 10 - 5, y = rnd() * 10 - 5 })
+
+            particle.age = rnd(0.3)
+            particle.size = 2 + rnd(1)
+            particle.max_age = 0.5 + rnd(0.5)
+            particle.spark = true
+            particle.red = true
+            particle.gravity = false
+
+            add(self.particles, particle)
+        end
+    end,
+    map_blue = function(age) 
+        local color = 7
+ 
+        if age > 1.5 then
+            color = 6
+        elseif age > 1.2 then
+            color = 12
+        elseif age > 1.0 then
+            color = 13
+        elseif age > 0.7 then
+            color = 1
+        elseif age > .5 then
+            color = 1
+        end
+
+        return color 
+    end,
+    map_red = function(age) 
+        local color = 7
+ 
+        if age > 1.5 then
+            color = 5
+        elseif age > 1.2 then
+            color = 2
+        elseif age > 1.0 then
+            color = 8
+        elseif age > 0.7 then
+            color = 10
+        elseif age > 0.5 then
+            color = 9
+        end
+
+        return color 
+    end,
+}
 -->8
 -- core statics
 dt = 0
@@ -328,12 +429,18 @@ player = {
                 self.state = action_states.attacking
                 self.time_left_in_state = 0.2;
                 if (self.weapon_hitbox:intersects(boss.hitbox)) then
-                    game_camera:shake(game_camera.predefined_shake_magnitude.small)
                     boss.health = mid(0, boss.health - 100, boss.max_health)
                     if boss.health == 0 then
                         boss.is_alive = false
                         input_cooldown = 1
                     end
+
+                    game_camera:shake(game_camera.predefined_shake_magnitude.small)
+                    particle_system:blood_splatter(vec:new({
+                        x = boss.position.x + 8,
+                        y = boss.position.y + 8,
+                        z = 0
+                    }))
                     sfx(60)
                 end
             end
@@ -530,6 +637,7 @@ end
 
 function update()
     game_camera:update()
+    particle_system:update()
     if boss.is_alive and player.is_alive then
         player:update()
         boss:update()
@@ -561,6 +669,7 @@ function draw()
         player:draw()
         boss:draw()
     end
+    particle_system:draw()
     draw_ui()
 end
 
