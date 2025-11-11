@@ -182,7 +182,8 @@ player = {
         up = vec:new({y = 0.08}),
         down = vec:new({y = -0.08})
     },
-    speed = vec:new({x = 0.2, y = 0.2}),
+    walking_speed = 1,
+    dashing_speed = 4,
     hitbox = box:new({position = vec:new(), width = 7, height = 12}),
     weapon_hitbox = box:new({position = vec:new(), width = 12, height = 12}),
     dash_speed = 5,
@@ -222,8 +223,27 @@ player = {
             end
         end
 
-        self.direction = direction
+        -- Clamp at max speed but keep at lower length to enable changing direction
+        -- without the length check it always snaps back, making it impossible to change direction
+        if self.velocity:length() > 1 then
+            self.velocity = self.velocity:normalize()
+        end
+        if self.state == action_states.dashing then
+            self.velocity = self.velocity * vec:new({
+                x = self.dashing_speed, 
+                y = self.dashing_speed, 
+                z = self.dashing_speed
+            })
+        else
+            self.velocity = self.velocity * vec:new({
+                x = self.walking_speed, 
+                y = self.walking_speed, 
+                z = self.walking_speed
+            })
+        end
 
+
+        self.direction = direction
         self.position = self.position + self.velocity
 
         self:clamp_to_edge_of_map()
@@ -424,7 +444,6 @@ boss = {
     },
     hitbox = box:new({position = vec:new(), width = 15, height = 15}),
     weapon_hitbox = box:new({position = vec:new(), width = 12, height = 12}),
-    speed = vec:new({x = 0.2, y = 0.2}),
     state = action_states.walking,
     direction = direction_states.up,
     time_left_in_state = 0,
