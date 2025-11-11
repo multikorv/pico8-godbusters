@@ -546,13 +546,13 @@ function draw()
     map(0, 0, 0, 0, 16, 16)
     if not boss.is_alive or not player.is_alive then
         local cycle_ends_text = "the cycle ends"
-        print(cycle_ends_text, text_hcenter(cycle_ends_text), 60)
+        print(cycle_ends_text, text_hcenter(cycle_ends_text), 60, 7)
         if player.is_alive then 
             local win_text = "MARIX HAS BEEN BROKEN"
-            print(win_text, text_hcenter(win_text), 65)
+            print(win_text, text_hcenter(win_text), 65, 6)
         else 
             local lose_text = "BUT THE FIGHT IS NOT OVER"
-            print(lose_text, text_hcenter(lose_text), 65) 
+            print(lose_text, text_hcenter(lose_text), 65, 6) 
         end
     else
         player:draw()
