@@ -544,7 +544,7 @@ function draw()
         local cycle_ends_text = "the cycle ends"
         print(cycle_ends_text, text_hcenter(cycle_ends_text), 60)
         if player.is_alive then 
-            local win_text = "MARUCS HAS BEEN BROKEN"
+            local win_text = "MARIX HAS BEEN BROKEN"
             print(win_text, text_hcenter(win_text), 65)
         else 
             local lose_text = "BUT THE FIGHT IS NOT OVER"
@@ -559,8 +559,8 @@ end
 
 function draw_ui()
     -- Boss
-    local boss_name = "MARUCS"
-    print (boss_name, text_hcenter(boss_name), 22)
+    local boss_name = "MARIX"
+    print (boss_name, text_hcenter(boss_name), 22, 7)
 
     -- Boss health
     local boss_health_left_ratio = boss.health / boss.max_health
