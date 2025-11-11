@@ -560,13 +560,13 @@ end
 function draw_ui()
     -- Boss
     local boss_name = "MARIX"
-    print (boss_name, text_hcenter(boss_name), 22, 7)
+    print (boss_name, text_hcenter(boss_name), 24, 7)
 
     -- Boss health
     local boss_health_left_ratio = boss.health / boss.max_health
 
     local boss_bar_y = 32
-    local boss_bar_thickness = 3
+    local boss_bar_thickness = 2
 
     rectfill(
         12 + game_camera.position.x, 
@@ -584,7 +584,7 @@ function draw_ui()
         12 + game_camera.position.x, 
         boss_bar_y + game_camera.position.y, 
         114 + game_camera.position.x, 
-        boss_bar_y - boss_bar_thickness + game_camera.position.y, 7
+        boss_bar_y - boss_bar_thickness + game_camera.position.y, 0
     )
 
     -- Player 
