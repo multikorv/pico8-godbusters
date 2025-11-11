@@ -563,7 +563,7 @@ boss = {
 
         local direction_to_player = (player.position - self.position):normalize()
 
-        self.velocity = direction_to_player * vec:new({x = 0.5, y = 0.5, z = 0.5})
+        self.velocity = direction_to_player * vec:new({x = 0.4, y = 0.4, z = 0.4})
         self.position = self.position + self.velocity
         self:update_hitboxes()
 
