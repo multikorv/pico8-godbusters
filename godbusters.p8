@@ -448,24 +448,27 @@ boss = {
     state = action_states.walking,
     direction = direction_states.up,
     time_left_in_state = 0,
-    health = 20000,
-    max_health = 20000,
+    health = 2000,
+    max_health = 2000,
     is_alive = true,
     -- TODO: This needs to support animation etc, temp
     update = function(self)
 
-        self.velocity = (player.position - self.position):normalize() * vec:new({x = 0.5, y = 0.5, z = 0.5})
+        local direction_to_player = (player.position - self.position):normalize()
 
+        self.velocity = direction_to_player * vec:new({x = 0.5, y = 0.5, z = 0.5})
         self.position = self.position + self.velocity
         self:update_hitboxes()
 
         if self.hitbox:intersects(player.hitbox) then
-            player.health = mid(0, player.health - 10, player.max_health)
+            player.health = mid(0, player.health - 60, player.max_health)
             if player.health == 0 then
                 player.is_alive = false
                 input_cooldown = 1
             end
             game_camera:shake(game_camera.predefined_shake_magnitude.medium)
+            player.velocity = direction_to_player
+
             sfx(61)
         end
     end,
