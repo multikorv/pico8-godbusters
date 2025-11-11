@@ -182,9 +182,9 @@ player = {
         up = vec:new({y = 0.08}),
         down = vec:new({y = -0.08})
     },
+    speed = vec:new({x = 0.2, y = 0.2}),
     hitbox = box:new({position = vec:new(), width = 7, height = 12}),
     weapon_hitbox = box:new({position = vec:new(), width = 12, height = 12}),
-    speed = vec:new({x = 0.2, y = 0.2}),
     dash_speed = 5,
     num_dashes = 3,
     max_dashes = 3,
@@ -231,13 +231,13 @@ player = {
         self:update_hitboxes()
     end,
     update_recharges = function(self)
-        if self.num_dashes < self.max_dashes then
-            self.dash_recharge_cooldown_seconds = max(0, self.dash_recharge_cooldown_seconds - dt)
-            if self.dash_recharge_cooldown_seconds == 0 then
-                self.num_dashes = self.num_dashes + 1
-                if self.num_dashes < self.max_dashes then
-                    self.dash_recharge_cooldown_seconds = self.dash_recharge_speed_seconds;
-                end
+        if self.num_dashes >= self.max_dashes then return end
+
+        self.dash_recharge_cooldown_seconds = max(0, self.dash_recharge_cooldown_seconds - dt)
+        if self.dash_recharge_cooldown_seconds == 0 then
+            self.num_dashes = self.num_dashes + 1
+            if self.num_dashes < self.max_dashes then
+                self.dash_recharge_cooldown_seconds = self.dash_recharge_speed_seconds;
             end
         end
     end,
