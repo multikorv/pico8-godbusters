@@ -609,7 +609,7 @@ function draw_ui()
         3 + game_camera.position.x, 
         player_bar_y + game_camera.position.y, 
         48 + game_camera.position.x, 
-        player_bar_y - player_bar_thickness + game_camera.position.y, 7
+        player_bar_y - player_bar_thickness + game_camera.position.y, 0
     )
 
     -- Player Stamina
@@ -618,9 +618,9 @@ function draw_ui()
     local stamina_y_pos = 124
     local stamina_padding = 6
     for i = 0, player.max_dashes - 1, 1 do
-        circfill(stamina_x_pos + (i * stamina_padding), stamina_y_pos, 2, 7)
+        circfill(stamina_x_pos + (i * stamina_padding), stamina_y_pos, 2, 0)
         if num_dashes_left > 0 then
-            circfill(stamina_x_pos + (i * stamina_padding), stamina_y_pos, 1, 8)
+            circfill(stamina_x_pos + (i * stamina_padding), stamina_y_pos, 1, 7)
             num_dashes_left = num_dashes_left - 1
         end
     end
